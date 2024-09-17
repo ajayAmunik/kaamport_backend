@@ -56,46 +56,14 @@ const UserSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now,
-  },
-  approveStatus: {
-    type: Boolean,
-    default: true,
-  },
-  experienceYears: {
-    type: Number,
-    default: 0,
-  },
-  worksDone: {
-    type: Number,
-     default: 0
-  },
-  priceRange: {
-    type: String,
-  },
-  timeDate: {
+  }, 
+   timeDate: {
     type: Date,
     required: false,
-  },
-  otherInfo: {
-    type: String,
-    required: false,
-     default: ""
-  },
-  registationStatus:{
-    type:Number,
-    default:0
-  },
+  },  
   token:{
     type:String,
     default: ""
-  },
-  categiry: {
-    type: String,
-    default:""
-  },
-  skills:{
-    type:Array,
-    default:[]
   },
   availableStartTime:{
     type: String,
@@ -104,9 +72,6 @@ const UserSchema = new mongoose.Schema({
   availableEndTime:{
     type: String,
     default:""
-  },
-  language:{
-    type:String
   }
 });
  

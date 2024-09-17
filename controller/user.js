@@ -1,6 +1,6 @@
 let helper = require("../helper/helper");
 let userController = require("../models/user");
-let worker = require("../models/workers");
+
 let mongoose = require("mongoose");
 
 const addUser = async (req, res) => {
@@ -134,156 +134,12 @@ const verifyOtpController = async (req, res) => {
   }
 };
 
-const homeScreen = async (req, res) => {
-  try {
-    let userId = req.userId.id;
 
-    let findUser = await userController.findById({ _id: userId });
 
-    if (!findUser) {
-      return res.status(404).json({
-        message: "User does not exist! Please Login again",
-        success: false,
-      });
-    } else if (findUser.registationStatus === 0) {
-      return res.status(400).json({
-        message: "required otp verification ",
-        success: false,
-      });
-    } else {
-      return res.status(200).json({
-        message: "Otp verified successfully",
-        data: {
-          token: findUser.token,
-          userFirstName: findUser.firstName,
-          userLastName: findUser.lastName,
-          notificationCount: 0,
-        },
-      });
-    }
-  } catch (error) {
-    console.log(error);
 
-    return res.status(500).json({
-      message: "server error",
-      error: error,
-    });
-  }
-};
-
-let getJob = async (req, res) => {
-  try {
-    let userId = req.userId.id;
-    let {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      dateOfBirth,
-      gender,
-      location,
-      image,
-      category,
-      experienceYears,
-      skills,
-      availableStartTime,
-      availableEndTime,
-    } = req.body;
-
-    let findUser = await userController.findOne({ _id: userId });
-
-    if (!findUser) {
-      return res.status(200).send({
-        message: "require proper token",
-        data: {},
-        responseStatus: 200,
-      });
-    } else {
-      await userController.findByIdAndUpdate(
-        { _id: userId },
-        {
-          $set: {
-            firstName,
-            lastName,
-            email,
-            dateOfBirth,
-            gender,
-            location,
-            image,
-            category,
-            experienceYears,
-            skills,
-            availableStartTime,
-            availableEndTime,
-          },
-        }
-      );
-
-      let findWorker = await worker({ workerId: userId });
-      if (!findWorker) {
-        let newWorker = new worker({ workerId: userId });
-        await newWorker.save();
-      }
-      return res.status(200).send({
-        data: {},
-        message: "successfully user get job account",
-        responseStatus: 200,
-      });
-    }
-  } catch (error) {
-    return res.status(500).send({
-      message: "server error",
-      error: error.message,
-    });
-  }
-};
-
-let jobsList = async (req, res) => {
-  try {
-    // Find all workers except the one with the current user's ID
-    const findjobbers = await worker.find({ workerId: { $ne: req.userId.id } });
-
-    // Map over the findjobbers to create an array of promises
-    const usersData = await Promise.all(
-      findjobbers.map(async (worker) => {
-        const findUser = await userController.findById(worker.workerId);
-
-        if (findUser) {
-          return {
-            id: findUser._id,
-            firstName: findUser.firstName,
-            lastName: findUser.lastName,
-            location: findUser.location,
-            photo: findUser.photo,
-            worksDone: findUser.worksDone,
-            categoryName: findUser.categiry,
-          };
-        }
-      })
-    );
-
-    // Filter out any undefined results
-    const filteredUsersData = usersData.filter((user) => user !== undefined);
-
-    return res.status(200).send({
-      message: "Data retrieved successfully",
-      data: filteredUsersData,
-      responseCode: 200,
-    });
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).send({
-      message: "Server error",
-      error: error.message,
-    });
-  }
-};
 
 module.exports = {
   addUser,
   verifyOtpController,
-  homeScreen,
-  getJob,
-  jobsList,
+
 };

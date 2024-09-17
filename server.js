@@ -6,17 +6,14 @@ const port =  5000;
 
 // import router files
 const userRouter = require("./router/user")
-const reportRouter = require("./router/report")
-const reviewRouter = require("./router/review")
-const bookingRequestRouter = require("./router/bookingRequest")
+
 
 app.use(express.json());
 
 
-app.use(reviewRouter)
-app.use(reportRouter)
+
 app.use(userRouter)
-app.use(bookingRequestRouter)
+
 
 
 
