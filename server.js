@@ -6,19 +6,21 @@ const port =  5000;
 
 // import router files
 const userRouter = require("./router/user")
-
+const category = require("./router/categoryRoute")
+const servicesRouter = require("./router/servicesRoute")
 
 app.use(express.json());
 
 
 
 app.use(userRouter)
-
+app.use(category)
+app.use(servicesRouter)
 
 
 
 mongoose
-  .connect("mongodb://localhost:27017/kaamport", {})
+  .connect("mongodb+srv://ajayamunik:Nfed6RWJWGDd2fMN@cluster0.51duirc.mongodb.net/Kamport", {})
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(port, () => {
