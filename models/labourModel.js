@@ -2,18 +2,17 @@ const mongoose = require('mongoose');
 
 // Define the schema
 const LabourSchema = new mongoose.Schema({
-    userId:{
-     type:String,
-     required: true,
-
-    },
+  userId: {
+    type: String,
+    required: true,
+  },
   firstName: {
     type: String,
-    default: ""
+    default: "",
   },
   lastName: {
     type: String,
-    default: ""
+    default: "",
   },
   phoneNumber: {
     type: String,
@@ -21,12 +20,12 @@ const LabourSchema = new mongoose.Schema({
     unique: true,
   },
   age: {
-    type: Number, // Changed to Number
-    default: null
+    type: Number,
+    default: null,
   },
   gender: {
     type: String,
-    default: "" // Added default to maintain consistency
+    default: "",
   },
   location: {
     latitude: {
@@ -36,50 +35,76 @@ const LabourSchema = new mongoose.Schema({
     longitude: {
       type: Number,
       default: 0,
-    }
+    },
   },
   address: {
     type: String,
-    default: "" // Added default value
+    default: "",
   },
   photo: {
     type: String,
-    default: ""
+    default: "",
   },
   activeStatus: {
     type: Boolean,
     default: true,
   },
-  experimnce: { // Correct typo to experience
+  experience: { // Corrected typo
     type: String,
-    default: ""
+    default: "",
   },
   categoryId: {
     type: String,
-    default: ""
+    default: "",
   },
-  skills: {
-    type: [String], // Array of strings to represent skills
-    default: []
-  },
-  otherSkills: {
-    type: String,
-    default: ""
-  },
+  services: [
+    {
+      serviceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Services', // Reference to the Services model
+        required: true,
+      },
+      serviceName: {
+        type: String,
+        required: true,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+    }
+  ],
+  otherSkills: [
+    {
+      serviceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Services',
+        required: true,
+      },
+      serviceName: {
+        type: String,
+        required: true,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+    }
+  ],
   availableStartTime: {
     type: String,
-    default: ""
+    default: "",
   },
   availableEndTime: {
     type: String,
-    default: ""
+    default: "",
   },
   language: {
-    type: String,
-    default: "" // Added default value
+    type: [String],
+    default: [],
   }
 }, {
-  timestamps: true, 
+  timestamps: true,
 });
 
-module.exports = mongoose.model('labours', LabourSchema); 
+module.exports = mongoose.model('Labour', LabourSchema);

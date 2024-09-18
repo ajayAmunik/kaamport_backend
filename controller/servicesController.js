@@ -1,33 +1,52 @@
 const ServicesModel = require("../models/servicesModel")
 
+
 const createServices = async (req, res) => {
-    try {
-        const userId = req.userId.id
+  try {
+      const userId = req.userId.id;
       const { services, categoryId } = req.body;
-  
-      if (!services || !categoryId) {
-        return res.status(200).json({responseCode: 400, message: 'services and categoryId are required' });
+
+
+      if (!services || !categoryId || !Array.isArray(services) || services.length === 0) {
+          return res.status(400).json({ responseCode: 400, message: 'Services and categoryId are required, and services must be an array' });
       }
 
-      const existingServices = await ServicesModel.findOne({services,createdBy: userId});
-      if(existingServices){
-        return res.status(200).json({responseCode:400, message: "services already exists"})
+      const savedServices = [];
+      for (const service of services) {
+          const { serviceName, price } = service;
+
+      
+          if (!serviceName || !price) {
+              return res.status(400).json({ responseCode: 400, message: 'Each service must have a name and price' });
+          }
+
+
+          const existingService = await ServicesModel.findOne({ serviceName, categoryId, createdBy: userId });
+          if (existingService) {
+              return res.status(400).json({ responseCode: 400, message: `Service "${serviceName}" already exists` });
+          }
+
+
+          const newService = new ServicesModel({
+              serviceName,
+              price,
+              categoryId,
+              createdBy: userId,
+              created_At: Date.now(),
+          });
+
+
+          const savedService = await newService.save();
+          savedServices.push(savedService);
       }
-      const newServices = new ServicesModel({
-        services,
-        categoryId,
-        createdBy: userId,
-        created_At: Date.now()
-      });
-  
-      await newServices.save();
-  
-      res.status(200).json({responseCode: 200, message: 'services added successfully', data: newServices });
-    } catch (error) {
+
+      return res.status(200).json({ responseCode: 200, message: 'Services added successfully', data: savedServices });
+  } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Server error', error });
-    }
-  };
+      return res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 
 
   const getAllServices = async (req, res) => {

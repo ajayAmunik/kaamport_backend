@@ -7,7 +7,10 @@ const port =  5000;
 // import router files
 const userRouter = require("./router/user")
 const category = require("./router/categoryRoute")
-const servicesRouter = require("./router/servicesRoute")
+const servicesRouter = require("./router/servicesRoute");
+const labour = require("./router/labourRoute");
+const bookings = require("./router/bookingRoute");
+
 
 app.use(express.json());
 
@@ -15,7 +18,10 @@ app.use(express.json());
 
 app.use(userRouter)
 app.use(category)
-app.use(servicesRouter)
+app.use(servicesRouter);
+app.use(labour);
+app.use(bookings);
+
 
 
 
