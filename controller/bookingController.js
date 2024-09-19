@@ -6,13 +6,12 @@ const createBooking = async (req, res) => {
   try {
     const { laborId, services, dateTime, otherInfo, images } = req.body;
 
-    // Validate labor
     const existingLabour = await LabourModel.findById(laborId);
     if (!existingLabour) {
       return res.status(400).json({ responseCode: 400, message: 'Labor not found' });
     }
 
-    // Validate services
+
     for (let service of services) {
       let existingService = await ServicesModel.findById(service.serviceId);
       if (!existingService) {
@@ -20,7 +19,7 @@ const createBooking = async (req, res) => {
       }
     }
 
-    // Create new booking
+
     const newBooking = new BookingModel({
       laborId,
       services,
