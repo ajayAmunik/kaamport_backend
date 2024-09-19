@@ -88,6 +88,27 @@ const getLabors = async (req, res) => {
   }
 };
 
+
+
+const getLabourById = async (req, res) => {
+  try {
+    const {labourId} = req.body
+
+   
+    const labour = await LabourModel.findById(labourId);
+
+    if (!labour) {
+      return res.status(200).json({ responseCode: 400, message: 'Labour not found' });
+    }
+
+    return res.status(200).json({ responseCode: 200, message: 'Labour details retrieved successfully', data: labour });
+  } catch (error) {
+    return res.status(500).json({ responseCode: 500, message: 'Server error', error: error.message });
+  }
+};
+
+
+
 const editLabor = async (req, res) => {
   try {
     const { labourId } = req.body;
@@ -161,6 +182,7 @@ const editLabor = async (req, res) => {
   module.exports ={
     createLabour,
     getLabors,
-    editLabor
+    editLabor,
+    getLabourById
 
   }

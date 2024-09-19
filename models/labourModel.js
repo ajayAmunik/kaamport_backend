@@ -60,13 +60,12 @@ const LabourSchema = new mongoose.Schema({
   services: [
     {
       serviceId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Services', // Reference to the Services model
-        required: true,
+        type: String,
+             required: true,
       },
       serviceName: {
         type: String,
-        required: true,
+      
       },
       price: {
         type: Number,
@@ -77,13 +76,12 @@ const LabourSchema = new mongoose.Schema({
   otherSkills: [
     {
       serviceId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Services',
-        required: true,
+        type: String
+     
       },
       serviceName: {
         type: String,
-        required: true,
+     
       },
       price: {
         type: Number,
