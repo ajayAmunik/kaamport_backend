@@ -2,7 +2,11 @@ let request = require("request")
 let jwt = require("jsonwebtoken")
 let config = require("../config/auth")
 
+let token = (userId, secreateKey) => {
+  const token = jwt.sign(userId, config.secreateKey);
 
+  return token;
+};
 
 const generateOTP = () => {
   const min = 1000;
@@ -126,5 +130,6 @@ const createToken = (phoneNumber, userId) => {
     signupOtp,
     createToken,
     date,
-    s3PDFUpload
+    s3PDFUpload,
+    token
   };
